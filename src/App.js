@@ -1,49 +1,53 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import TodoListTemplate from './components/TodoListTemplate';
 import Form from './components/Form';
 import TodoItemList from './components/TodoItemList';
 
 
-class App extends Component {
+const App = () => {
 
-  id = 2 // 초기 id 값
+  let id = 2 // 초기 id 값
 
-  state = {
+  const [state , setState] = useState({
+
     input: '',
     todos: [
       { id: 0, text: ' 자바스크립트', checked: true },
       { id: 1, text: ' 리액트', checked: false }
      
     ]
-  }
 
-  handleChange = (e) => {
-    this.setState({
+  });
+
+
+
+ const handleChange = (e) => {
+    setState({
       input: e.target.value 
     });
   }
 
-  handleCreate = () => {
-    const { input, todos } = this.state;
-    this.setState({
+  const handleCreate = () => {
+    const { input, todos } = state;
+    setState({
       input: '', // 인풋 비우고
       // concat 을 사용하여 배열에 추가
       todos: todos.concat({
-        id: this.id++,
+        id: id++,
         text: input,
         checked: false
       })
     });
   }
 
-  handleKeyPress = (e) => {
+  const handleKeyPress = (e) => {
     if(e.key === 'Enter') {
-      this.handleCreate();
+      handleCreate();
     }
   }
 
-  handleToggle = (id) => {
-    const { todos } = this.state;
+  const handleToggle = (id) => {
+    const { todos } = state;
 
     const index = todos.findIndex(todo => todo.id === id);
     const selected = todos[index]; 
@@ -55,27 +59,21 @@ class App extends Component {
       checked: !selected.checked
     };
 
-    this.setState({
+    setState({
       todos: nextTodos
     });
   }
 
-  handleRemove = (id) => {
-    const { todos } = this.state;
-    this.setState({
+  const handleRemove = (id) => {
+    const { todos } = state;
+    setState({
       todos: todos.filter(todo => todo.id !== id)
     });
   }
 
-  render() {
-    const { input, todos } = this.state;
-    const {
-      handleChange,
-      handleCreate,
-      handleKeyPress,
-      handleToggle,
-      handleRemove
-    } = this;
+   
+    const { input, todos } = state;
+  
 
     return (
       <TodoListTemplate form={(
@@ -89,7 +87,7 @@ class App extends Component {
         <TodoItemList todos={todos} onToggle={handleToggle} onRemove={handleRemove} />
       </TodoListTemplate>
     );
-  }
+  
 }
 
 export default App;
