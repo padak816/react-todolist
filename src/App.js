@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TodoListTemplate from './components/TodoListTemplate';
 import Form from './components/Form';
 import TodoItemList from './components/TodoItemList';
@@ -6,7 +6,8 @@ import TodoItemList from './components/TodoItemList';
 
 const App = () => {
 
-  let id = 2 // 초기 id 값
+  let id = useRef(2);
+  //let id = 2 // 초기 id 값
 
   const [state , setState] = useState({
 
@@ -23,6 +24,7 @@ const App = () => {
 
  const handleChange = (e) => {
     setState({
+      ...state,
       input: e.target.value 
     });
   }
@@ -33,11 +35,12 @@ const App = () => {
       input: '', // 인풋 비우고
       // concat 을 사용하여 배열에 추가
       todos: todos.concat({
-        id: id++,
+        id: id.current,
         text: input,
         checked: false
       })
     });
+    id.current+=1;  
   }
 
   const handleKeyPress = (e) => {
